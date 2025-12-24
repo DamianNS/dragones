@@ -1,7 +1,101 @@
 ﻿@page "/"
+@using Editor.Components.Componentes
+@inject IJSRuntime JS
 
 <PageTitle>Home</PageTitle>
 
 <h1>Hello, world!</h1>
 
 Welcome to your new app.
+
+<style>
+    :root {
+        --tile-size: @(TileSize)px;
+        --map-cols: @MapWidth;
+    }
+</style>
+
+
+    <div class="map-grid" style="display: grid; grid-template-columns: repeat(var(--map-cols), var(--tile-size)); width: fit-content; height: fit-content;">
+        @for (int y = 0; y < 50; y++)
+        {
+            for (int x = 0; x < 50; x++)
+            {
+                <TileComponent X="x" Y="y" Size="TileSize"></TileComponent>
+            }
+        }
+    </div>
+
+<div>
+    <label>Sum +</label>
+    <label>Sum -</label>
+</div>
+
+<script>
+    window.setupTileNavigation = (rows, cols, dotNetHelper) => {
+        document.addEventListener('keydown', (e) => {
+            if(e.key == "+") {
+                var tiles = document.getElementsByTagName("TileComponent");
+                 dotNetHelper.invokeMethodAsync('ExecuteZoom', 1);
+                e.preventDefault();
+            }
+
+            if(e.key == "-") {
+                var tiles = document.getElementsByTagName("TileComponent");
+                 dotNetHelper.invokeMethodAsync('ExecuteZoom', -1);
+                e.preventDefault();
+            }
+
+
+            const active = document.activeElement;
+            if (!active || !active.id.startsWith('tile-')) return;
+
+            // Extraer X e Y del ID actual "tile-x-y"
+            const parts = active.id.split('-');
+            let x = parseInt(parts[1]);
+            let y = parseInt(parts[2]);
+
+            switch (e.key) {
+                case "ArrowUp":    y = Math.max(0, y - 1); break;
+                case "ArrowDown":  y = Math.min(rows - 1, y + 1); break;
+                case "ArrowLeft":  x = Math.max(0, x - 1); break;
+                case "ArrowRight": x = Math.min(cols - 1, x + 1); break;
+                default: return; // No es una tecla de dirección
+            }
+
+            e.preventDefault(); // Evita que la página haga scroll
+            const nextTile = document.getElementById(`tile-${x}-${y}`);
+            if (nextTile) {
+                nextTile.focus();
+                nextTile.style.zIndex = 10;
+                active.style.zIndex = 1;
+            }
+        });
+    };
+</script>
+
+@code {
+
+    public int TileSize = 10;
+    int MapWidth = 50;
+    private DotNetObjectReference<Home>? objRef;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            objRef = DotNetObjectReference.Create(this);
+            // Pasamos el tamaño del mapa para los límites de navegación
+            await JS.InvokeVoidAsync("setupTileNavigation", 50, 50, objRef);
+        }
+    }
+
+    [JSInvokable]
+    public void ExecuteZoom(int direction)
+    {
+        TileSize = Math.Clamp(TileSize + direction, 5, 50); ;
+        StateHasChanged();
+    }
+
+    public void Dispose() => objRef?.Dispose();
+}
