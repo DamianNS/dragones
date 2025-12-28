@@ -3,9 +3,15 @@
     public enum TileTypeEnum
     {
         Empty,
-        Wall,
+        Outland,
         Start,
         End,
-        Path
+        Path,
+        Fill,
+        Other,
+        Escalera,
+        Puerta,
+        DivididoEn4,
+        Water
     }
 }
