@@ -10,6 +10,7 @@ namespace Editor.Components.Pages
     {
         public int TileSize = 10;
         int MapWidth = 50;
+        int MapHeight = 50;
         private DotNetObjectReference<Home>? objRef;
         private Dictionary<int, TileForm> Tiles = new Dictionary<int, TileForm>();
         TileTypeEnum tipoo = TileTypeEnum.Empty;
@@ -25,10 +26,9 @@ namespace Editor.Components.Pages
             {
                 objRef = DotNetObjectReference.Create(this);
                 // Pasamos el tamaño del mapa para los límites de navegación
-                await JS.InvokeVoidAsync("setupTileNavigation", 50, 50, objRef);
-
+                
                 CargarMapas();
-
+                await JS.InvokeVoidAsync("setupTileNavigation", MapWidth, MapHeight, objRef);
             }
         }
 
@@ -49,6 +49,17 @@ namespace Editor.Components.Pages
         public void ExecuteZoom(int direction)
         {
             TileSize = Math.Clamp(TileSize + direction, 5, 50); ;
+            StateHasChanged();
+        }
+
+        [JSInvokable]
+        public void ActualizaTile(int x, int y)
+        {
+            var t = Tiles.FirstOrDefault(tt => tt.Value.IsChecked);
+            if(t.Value != null)
+            {
+                selectedMapa?.Tiles[x,y] = t.Value;                
+            }
             StateHasChanged();
         }
 
@@ -119,7 +130,7 @@ namespace Editor.Components.Pages
                     Type = t.Value.Type,
                     IsChecked = false
                 });
-            }            
+            }
         }
 
         void nuevoMapa()

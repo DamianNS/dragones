@@ -33,7 +33,9 @@
             {
                 for (int x = 0; x < 50; x++)
                 {
-                    <TileComponent X="x" Y="y" Size="TileSize" Type="TileTypeEnum.Empty"></TileComponent>
+                    var tile = selectedMapa?.Tiles[x, y];
+                    var tipo = tile != null ? tile.Type : TileTypeEnum.Empty;
+                    <TileComponent X="x" Y="y" Size="TileSize" Type="tipo" Tile="tile"></TileComponent>
                 }
             }
         </div>
@@ -76,14 +78,15 @@
                 var tiles = document.getElementsByTagName("TileComponent");
                  dotNetHelper.invokeMethodAsync('ExecuteZoom', 1);
                 e.preventDefault();
+                return;
             }
 
             if(e.key == "-") {
                 var tiles = document.getElementsByTagName("TileComponent");
                  dotNetHelper.invokeMethodAsync('ExecuteZoom', -1);
                 e.preventDefault();
+                return;
             }
-
 
             const active = document.activeElement;
             if (!active || !active.id.startsWith('tile-')) return;
@@ -98,7 +101,13 @@
                 case "ArrowDown":  y = Math.min(rows - 1, y + 1); break;
                 case "ArrowLeft":  x = Math.max(0, x - 1); break;
                 case "ArrowRight": x = Math.min(cols - 1, x + 1); break;
-                default: return; // No es una tecla de dirección
+                case " ":
+                    dotNetHelper.invokeMethodAsync('ActualizaTile', x,y);
+                    e.preventDefault();
+                    return;
+                default: 
+                    console.log(e.key);
+                    return; // No es una tecla de dirección
             }
 
             e.preventDefault(); // Evita que la página haga scroll
