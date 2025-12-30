@@ -1,6 +1,6 @@
 ﻿@using Editor.Models
 @using Editor.Models.Enums
-<div class="focus-ring focus-ring-warning" tabindex="0" id="tile-@X-@Y" style="height: @(Size)px; width: @(Size)px; background-color: @color.Name;border: solid 1px grey;"></div>
+<div class="focus-ring focus-ring-warning" tabindex="0" id="tile-@X-@Y" style="height: @(Size)px; width: @(Size)px; background-color: @color.Name;@bordes; z-index: 1;"></div>
 @code{
     [Parameter] public int X { get; set; }
     [Parameter] public int Y { get; set; }
@@ -9,6 +9,7 @@
     [Parameter] public Tile? Tile { get; set; }
 
     private System.Drawing.Color color;
+    private string bordes = "";
 
     protected override Task OnParametersSetAsync()
     {
@@ -28,7 +29,22 @@
                 color = System.Drawing.Color.DarkGray;
                 break;
         }
-
+        if(Tile != null && Tile.Muros.Any())
+        {
+            // border-top-style: dotted;
+            // border - right - style: solid;
+            // border - bottom - style: dotted;
+            // border - left - style: solid;
+            var arriba = Tile.Muros.Contains(DirectionEnum.Top) ? "border-top: 3px solid black;" : "border-top: 1px solid lightgrey;";
+            var abajo = Tile.Muros.Contains(DirectionEnum.Bottom) ? "border-bottom: 3px solid black;" : "border-bottom: 1px solid lightgrey;";
+            var derecha = Tile.Muros.Contains(DirectionEnum.Right) ? "border-right: 3px solid black;" : "border-right: 1px solid lightgrey;";
+            var izquierda = Tile.Muros.Contains(DirectionEnum.Left) ? "border-left: 3px solid black;" : "border-left: 1px solid grlightgreyey;";
+            bordes = arriba + abajo + derecha + izquierda;
+        }
+        else
+        {
+            bordes = "border: solid 1px grey;";
+        }
         return base.OnParametersSetAsync();
     }
 }

@@ -11,6 +11,17 @@ namespace Editor.Models
         public List<DirectionEnum> Muros { get; set; } = new List<DirectionEnum>();
 
 
-        public List<Aberturas> Aberrturas { get; set; } = new List<Aberturas>();
+        public List<Abertura> Aberturas { get; set; } = new List<Abertura>();
+
+        public Tile Clone()
+        {
+            return new Tile()
+            {
+                Type = this.Type,
+                OtherDesfinition = this.OtherDesfinition + "",
+                Muros = new List<DirectionEnum>(this.Muros),
+                Aberturas = this.Aberturas.Select(a => a.Clone()).ToList()
+            };
+        }
     }
 }

@@ -14,10 +14,12 @@ namespace Editor.Components.Pages
         private DotNetObjectReference<Home>? objRef;
         private Dictionary<int, TileForm> Tiles = new Dictionary<int, TileForm>();
         TileTypeEnum tipoo = TileTypeEnum.Empty;
-        int indice = 0;
+        int indice = -1;
 
         private List<Mapa> Mapas = new();
         private Mapa? selectedMapa;
+        int CursorX = 0;
+        int CursorY = 0;
 
         // TODO: Modificar que el mapa sea de tamaño dynamico
         protected override async Task OnAfterRenderAsync(bool firstRender)
@@ -48,7 +50,7 @@ namespace Editor.Components.Pages
         [JSInvokable]
         public void ExecuteZoom(int direction)
         {
-            TileSize = Math.Clamp(TileSize + direction, 5, 50); ;
+            TileSize = Math.Clamp(TileSize + direction, 10, 50); ;
             StateHasChanged();
         }
 
@@ -58,8 +60,25 @@ namespace Editor.Components.Pages
             var t = Tiles.FirstOrDefault(tt => tt.Value.IsChecked);
             if(t.Value != null)
             {
-                selectedMapa?.Tiles[x,y] = t.Value;                
+                var tt = t.Value.Clone();
+                selectedMapa?.Tiles[x,y] = tt;
             }
+            StateHasChanged();
+        }
+
+        [JSInvokable]
+        public void ActualizaCursor(int x, int y)
+        {
+            CursorX = x;
+            CursorY = y;
+            StateHasChanged();
+        }
+
+        [JSInvokable]
+        public void DeleteTile(int x, int y)
+        {
+            selectedMapa?.Tiles[x, y] = null;
+            
             StateHasChanged();
         }
 
@@ -77,6 +96,7 @@ namespace Editor.Components.Pages
 
         public void onActualizarTile(TileTypeEnum type)
         {
+            if(indice < 0 || indice >= Tiles.Count) return;
             var tile = Tiles[indice];
             tile.Type = type;
         }
@@ -128,7 +148,10 @@ namespace Editor.Components.Pages
                 Tiles = selectedMapa.ExampleTiles.ToDictionary(t => t.Key, t => new TileForm
                 {
                     Type = t.Value.Type,
-                    IsChecked = false
+                    IsChecked = false,
+                    Muros = t.Value.Muros,
+                    Aberturas = t.Value.Aberturas,
+                    OtherDesfinition = t.Value.OtherDesfinition
                 });
             }
         }
@@ -152,6 +175,23 @@ namespace Editor.Components.Pages
             //}
             var f = new FileService();
             f.SaveMapa(selectedMapa);
+        }
+
+        void onPared(DirectionEnum dire)
+        {
+            if(indice < 0 || indice >= Tiles.Count) return;
+            var t = Tiles[indice];
+            if (t == null) return;
+            
+            if(t.Muros.Any(d=> d == dire))
+            {
+                t.Muros.Remove(dire);
+            }
+            else
+            {
+                t.Muros.Add(dire);
+            }
+            StateHasChanged();
         }
     }
 }
