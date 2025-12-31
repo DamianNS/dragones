@@ -193,5 +193,27 @@ namespace Editor.Components.Pages
             }
             StateHasChanged();
         }
+
+        void onAbertura(DirectionEnum dire)
+        {
+            if (indice < 0 || indice >= Tiles.Count) return;
+            var t = Tiles[indice];
+            if (t == null) return;
+
+            if (t.Aberturas.Any(d => d.Direccion == dire))
+            {
+                t.Aberturas.RemoveAll(a => a.Direccion == dire);                
+            }
+            else
+            {
+                var a = new Abertura()
+                {
+                    Direccion = dire,
+                    Tipo = TypeAberturaEnum.Door
+                };
+                t.Aberturas.Add(a);
+            }
+            StateHasChanged();
+        }
     }
 }
