@@ -1,0 +1,7 @@
+<Solution>
+  <Project Path="NiquelSoft.Dragones.MySql/NiquelSoft.Dragones.MySql.csproj" Id="6a464daf-07da-47c3-a493-b234fc0798fc" />
+  <Project Path="NiquelSoft.Dragones.SqlServer/NiquelSoft.Dragones.SqlServer.csproj" Id="d3c41d64-6889-4697-b914-f7a36c3b04ae" />
+  <Project Path="NiquelSoft.Dragones.Storage/NiquelSoft.Dragones.Storage.csproj" Id="3a954a29-ec05-4289-af90-13579b5e4f15" />
+  <Project Path="NiquelSoft.Dragones.Web/NiquelSoft.Dragones.Web.csproj" Id="36f5418a-0322-4655-a443-162ce9b20223" />
+  <Project Path="NiquelSoft.Dragones/NiquelSoft.Dragones.csproj" Id="66b39bf9-c766-4972-a59c-985dfbbd99e6" />
+</Solution>

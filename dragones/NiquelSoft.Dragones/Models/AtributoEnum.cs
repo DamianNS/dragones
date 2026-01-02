@@ -4,9 +4,8 @@ using System.Text;
 
 namespace NiquelSoft.Dragones.Models
 {
-    internal enum AtributoEnum
+    public enum AtributoEnum
     {
-        None,
         Fuerza,
         Destreza,
         Constitucion,

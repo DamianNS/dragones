@@ -4,7 +4,7 @@ using System.Text;
 
 namespace NiquelSoft.Dragones.Models
 {
-    internal class Atributo
+    public class Atributo
     {
         public AtributoEnum Tipo { get; set; }
         public int Valor => BaseValor + Modificadores;

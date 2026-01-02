@@ -1,0 +1,94 @@
+﻿@page "/personajes/crear"
+@using Microsoft.AspNetCore.Components.Forms
+
+<h3>Crear personaje (D&amp;D)</h3>
+
+<EditForm Model="@Model" OnValidSubmit="HandleValidSubmit">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <div class="mb-3">
+        <label>Nombre</label>
+        <InputText class="form-control" @bind-Value="Model.Nombre" />
+    </div>
+
+    <div class="row">
+        <div class="col-md-4 mb-3">
+            <label>Raza</label>
+            <InputSelect class="form-select" @bind-Value="Model.Raza">
+                @foreach (var r in Razas) { <option value="@r">@r</option> }
+            </InputSelect>
+        </div>
+        <div class="col-md-4 mb-3">
+            <label>Clase</label>
+            <InputSelect class="form-select" @bind-Value="Model.Clase">
+                @foreach (var c in Clases) { <option value="@c">@c</option> }
+            </InputSelect>
+        </div>
+        <div class="col-md-4 mb-3">
+            <label>Nivel</label>
+            <InputNumber class="form-control" @bind-Value="Model.Nivel" />
+        </div>
+    </div>
+
+    <div class="mb-3">
+        <label>Trasfondo</label>
+        <InputTextArea class="form-control" @bind-Value="Model.Trasfondo" />
+    </div>
+
+    <div class="mb-3">
+        <label>Alineamiento</label>
+        <InputSelect class="form-select" @bind-Value="Model.Alineamiento">
+            @foreach (var a in Alineamientos) { <option value="@a">@a</option> }
+        </InputSelect>
+    </div>
+
+    <h5>Caracteristicas (tiradas)</h5>
+    <div class="row mb-2">
+        <div class="col-6 col-md-2">
+            <label>Fuerza</label>
+            <InputNumber class="form-control" @bind-Value="Model.Fuerza" />
+        </div>
+        <div class="col-6 col-md-2">
+            <label>Destreza</label>
+            <InputNumber class="form-control" @bind-Value="Model.Destreza" />
+        </div>
+        <div class="col-6 col-md-2">
+            <label>Constitución</label>
+            <InputNumber class="form-control" @bind-Value="Model.Constitucion" />
+        </div>
+        <div class="col-6 col-md-2">
+            <label>Inteligencia</label>
+            <InputNumber class="form-control" @bind-Value="Model.Inteligencia" />
+        </div>
+        <div class="col-6 col-md-2">
+            <label>Sabiduría</label>
+            <InputNumber class="form-control" @bind-Value="Model.Sabiduria" />
+        </div>
+        <div class="col-6 col-md-2">
+            <label>Carisma</label>
+            <InputNumber class="form-control" @bind-Value="Model.Carisma" />
+        </div>
+    </div>
+
+    <div class="mb-3">
+        <button type="button" class="btn btn-outline-primary me-2" @onclick="RollAll">Rodar todos (4d6, drop lowest)</button>
+        <button type="button" class="btn btn-outline-secondary me-2" @onclick="ApplyStandardArray">Aplicar array estándar</button>
+        <button type="button" class="btn btn-outline-danger me-2" @onclick="Reset">Reset</button>
+    </div>
+
+    <div class="mb-3">
+        <label>Equipo / Notas</label>
+        <InputTextArea class="form-control" @bind-Value="Model.Notas" />
+    </div>
+
+    <div class="mb-3">
+        <button type="submit" class="btn btn-primary">Guardar personaje</button>
+    </div>
+
+    @if (!string.IsNullOrEmpty(SaveMessage))
+    {
+        <div class="alert alert-success mt-2">@SaveMessage</div>
+    }
+</EditForm>
+
