@@ -3,3 +3,6 @@
 /Editor/Editor/wwwroot/bootstrap
 /Editor/Editor/bin
 *.mapa
+/dragones/.vs
+/dragones/dragones/bin
+/dragones/dragones/obj
