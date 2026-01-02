@@ -1,0 +1,4 @@
+<Solution>
+  <Project Path="Dragones.Core/Dragones.Core.csproj" Id="2326f9a3-ac53-41c1-966b-5076be4d7121" />
+  <Project Path="dragones/dragones.csproj" />
+</Solution>

@@ -8,9 +8,6 @@
             int ancho = Console.WindowWidth;
             int alto = Console.WindowHeight;
 
-            for(int i = 0; i < alto-1; i++)
-                Console.WriteLine();
-
             // Dibujamos la parte superior del marco
             Console.SetCursorPosition(0, 0);
             Console.Write('╔'); // Esquina superior izquierda
@@ -49,23 +46,20 @@
 
             Console.CancelKeyPress += (sender, e) =>
             {
-                e.Cancel = true; // Evita que la aplicación se cierre inmediatamente
-                Console.SetCursorPosition(0, alto);                
-                Console.WriteLine("\nSaliendo de la aplicación...");
-                Environment.Exit(0); // Cierra la aplicación de manera controlada
+                // Manejar la señal de interrupción (Ctrl+C)
+                e.Cancel = true; // Evitar que la aplicación se cierre inmediatamente
+                Console.SetCursorPosition(5, alto - 3);
+                Console.WriteLine("Interrupción detectada. Saliendo...");
+                Environment.Exit(0);
             };
 
-            Console.CursorVisible = false; // Oculta el cursor
+            Console.CursorVisible = false; // Ocultar el cursor
+
+
 
             while (true)
             {
-                var k = Console.ReadKey(true);
-                Console.SetCursorPosition(5, 5);
-                Console.WriteLine($"Tecla presionada: {k.KeyChar}    ");
             }
-                
-
-            Task.Delay(-1).Wait(); // Espera indefinidamente hasta que se presione Ctrl+C
         }
     }
 }

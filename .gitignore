@@ -6,3 +6,10 @@
 /dragones/.vs
 /dragones/dragones/bin
 /dragones/dragones/obj
+/dragones.console/.vs
+/dragones.console/Dragones.Core/obj
+/dragones.console/dragones/bin
+/dragones.console/dragones/obj
+/dragones/NiquelSoft.Dragones.MySql/obj
+/dragones/NiquelSoft.Dragones.SqlServer/obj
+/dragones/NiquelSoft.Dragones/obj
