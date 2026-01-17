@@ -33,7 +33,7 @@
                 <option value="@mapa">@mapa.Nombre</option>
             }
         </InputSelect>
-        <button class="btn btn-primary" @onclick="onCargarMapa">Cargar Mapa</button>
+        <button class="btn btn-primary" @onclick="OnCargarMapa">Cargar Mapa</button>
         <button class="btn btn-primary" @onclick="nuevoMapa">Nuevo Mapa</button>
         <button class="btn btn-primary" @onclick="SaveMapa">Guardar Mapa</button>
     </div>
@@ -73,9 +73,9 @@
                         <option value="@type">@type.ToString()</option>
                     }
                 </InputSelect>
-                <button class="btn btn-primary" @onclick="() => onActualizarTile(tipoo)">Actualizar</button>
+                <button class="btn btn-primary" @onclick="() => OnActualizarTile(tipoo)">Actualizar</button>
             }            
-            <button @onclick="onAgregarTile">Agregar</button>
+            <button class="btn btn-primary" @onclick="OnAgregarTile">Agregar</button>
         </div>
         <div class="d-flex flex-column border border-info align-items-center p-2">
             <div class="d-grid" style="grid-template-columns: repeat(3, 48px); grid-template-rows: repeat(3, 48px); gap:8px; justify-items:center; align-items:center;">
