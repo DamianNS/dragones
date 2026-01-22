@@ -12,11 +12,11 @@ namespace Editor.Components.Pages
         int MapWidth = 50;
         int MapHeight = 50;
         private DotNetObjectReference<Home>? objRef;
-        private Dictionary<int, TileForm> Tiles = new Dictionary<int, TileForm>();
+        private Dictionary<int, TileForm> Tiles = [];
         TileTypeEnum tipoo = TileTypeEnum.Empty;
         int indice = -1;
 
-        private List<Mapa> Mapas = new();
+        private readonly List<Mapa> Mapas = [];
         private Mapa? selectedMapa;
         int CursorX = 0;
         int CursorY = 0;
@@ -28,7 +28,7 @@ namespace Editor.Components.Pages
             {
                 objRef = DotNetObjectReference.Create(this);
                 // Pasamos el tamaño del mapa para los límites de navegación
-                
+
                 CargarMapas();
                 await JS.InvokeVoidAsync("setupTileNavigation", MapWidth, MapHeight, objRef);
             }
@@ -41,9 +41,11 @@ namespace Editor.Components.Pages
             f.getMapas().ForEach(m =>
             {
                 Mapas.Add(m);
-            });           
+            });
             selectedMapa = Mapas.FirstOrDefault();
-            onCargarMapa();
+            MapWidth = selectedMapa?.Width ?? 50;
+            MapHeight = selectedMapa?.Height ?? 50;
+            OnCargarMapa();
             StateHasChanged();
         }
 
@@ -58,10 +60,10 @@ namespace Editor.Components.Pages
         public void ActualizaTile(int x, int y)
         {
             var t = Tiles.FirstOrDefault(tt => tt.Value.IsChecked);
-            if(t.Value != null)
+            if (t.Value != null)
             {
                 var tt = t.Value.Clone();
-                selectedMapa?.Tiles[x,y] = tt;
+                selectedMapa?.Tiles[x, y] = tt;
             }
             StateHasChanged();
         }
@@ -78,13 +80,12 @@ namespace Editor.Components.Pages
         public void DeleteTile(int x, int y)
         {
             selectedMapa?.Tiles[x, y] = null;
-            
             StateHasChanged();
         }
 
         public void Dispose() => objRef?.Dispose();
 
-        public void onAgregarTile()
+        public void OnAgregarTile()
         {
             var key = Tiles.Count;
             var t = new TileForm()
@@ -94,9 +95,9 @@ namespace Editor.Components.Pages
             Tiles.Add(key, t);
         }
 
-        public void onActualizarTile(TileTypeEnum type)
+        public void OnActualizarTile(TileTypeEnum type)
         {
-            if(indice < 0 || indice >= Tiles.Count) return;
+            if (indice < 0 || indice >= Tiles.Count) return;
             var tile = Tiles[indice];
             tile.Type = type;
         }
@@ -140,10 +141,10 @@ namespace Editor.Components.Pages
             StateHasChanged();
         }
 
-        void onCargarMapa()
+        void OnCargarMapa()
         {
             if (selectedMapa is null) return;
-            if( selectedMapa.ExampleTiles != null)
+            if (selectedMapa.ExampleTiles != null)
             {
                 Tiles = selectedMapa.ExampleTiles.ToDictionary(t => t.Key, t => new TileForm
                 {
@@ -158,17 +159,17 @@ namespace Editor.Components.Pages
 
         void nuevoMapa()
         {
-            selectedMapa = new Mapa(50,50)
+            selectedMapa = new Mapa(50, 50)
             {
-                Nombre = "Nuevo Mapa"                
+                Nombre = "Nuevo Mapa"
             };
             Mapas.Add(selectedMapa);
         }
 
         void SaveMapa()
-        {            
+        {
             if (selectedMapa is null) return;
-            selectedMapa.ExampleTiles = Tiles.ToDictionary(t=> t.Key, t=>(Tile)t.Value);
+            selectedMapa.ExampleTiles = Tiles.ToDictionary(t => t.Key, t => (Tile)t.Value);
             //foreach (var tile in Tiles)
             //{
             //    selectedMapa.Tiles[0,0] = tile.Value;
@@ -179,11 +180,11 @@ namespace Editor.Components.Pages
 
         void onPared(DirectionEnum dire)
         {
-            if(indice < 0 || indice >= Tiles.Count) return;
+            if (indice < 0 || indice >= Tiles.Count) return;
             var t = Tiles[indice];
             if (t == null) return;
-            
-            if(t.Muros.Any(d=> d == dire))
+
+            if (t.Muros.Any(d => d == dire))
             {
                 t.Muros.Remove(dire);
             }
@@ -202,7 +203,7 @@ namespace Editor.Components.Pages
 
             if (t.Aberturas.Any(d => d.Direccion == dire))
             {
-                t.Aberturas.RemoveAll(a => a.Direccion == dire);                
+                t.Aberturas.RemoveAll(a => a.Direccion == dire);
             }
             else
             {

@@ -1,0 +1,7 @@
+{
+    "dotrush.roslyn.projectOrSolutionFiles": [
+        "/home/coff/src/dragones/Editor/Editor.slnx"
+    ],
+    "explorer.excludeGitIgnore": true,
+    "csharp.hotReload.onChange": "always"
+}
