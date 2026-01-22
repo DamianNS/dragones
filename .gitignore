@@ -19,3 +19,4 @@
 /dragones/NiquelSoft.Dragones.Web/obj
 /dragones/NiquelSoft.Dragones/bin
 /dragones/NiquelSoft.Dragones.Web/wwwroot/lib
+*.user

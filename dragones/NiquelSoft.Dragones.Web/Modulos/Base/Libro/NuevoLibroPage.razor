@@ -1,0 +1,68 @@
+﻿@page "/libro/nuevo"
+@using Microsoft.AspNetCore.Components.Forms
+@using NiquelSoft.Dragones.Models
+@inject NavigationManager NavigationManager
+
+<h3>Nuevo Libro</h3>
+
+@if (guardado)
+{
+    <div class="alert alert-success">Libro guardado correctamente.</div>
+}
+
+<EditForm Model="@libro" OnValidSubmit="HandleValidSubmit">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <div class="mb-3">
+        <label for="titulo" class="form-label">Título</label>
+        <InputText id="titulo" class="form-control" @bind-Value="libro.Titulo" />
+    </div>
+
+    <div class="mb-3">
+        <label for="autor" class="form-label">Autor</label>
+        <InputText id="autor" class="form-control" @bind-Value="libro.Autor" />
+    </div>
+
+    <div class="mb-3">
+        <label for="descripcion" class="form-label">Descripción</label>
+        <InputTextArea id="descripcion" class="form-control" @bind-Value="libro.Descripcion" rows="6" />
+    </div>
+
+    <button type="submit" class="btn btn-primary">Guardar</button>
+    <button type="button" class="btn btn-secondary ms-2" @onclick="Cancelar">Cancelar</button>
+</EditForm>
+
+@code {
+    private Libro libro = new Libro();
+    private bool guardado;
+
+    private async Task HandleValidSubmit()
+    {
+        // Aquí se debe llamar al servicio real para persistir el libro.
+        // De momento se simula guardado y se limpia el formulario.
+        await SaveLibroAsync(libro);
+
+        guardado = true;
+        libro = new Libro();
+
+        // Mostrar mensaje brevemente (opcional)
+        await Task.Delay(1200);
+        guardado = false;
+
+        // Si prefieres redirigir a la lista de libros:
+        // NavigationManager.NavigateTo("/libros");
+    }
+
+    // Método de persistencia simulado — reemplazar por el servicio real.
+    private Task SaveLibroAsync(Libro l)
+    {
+        // TODO: Inyectar y usar un servicio/repository para persistir en base de datos.
+        return Task.CompletedTask;
+    }
+
+    private void Cancelar()
+    {
+        NavigationManager.NavigateTo("/");
+    }
+}
