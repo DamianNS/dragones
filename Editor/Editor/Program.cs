@@ -15,6 +15,13 @@ namespace Editor
 
             var app = builder.Build();
 
+            var baseHref = app.Configuration["AppBaseHref"];
+            if (!string.IsNullOrWhiteSpace(baseHref))
+            {
+                Console.WriteLine($"BaseHref: {baseHref}");
+                app.UsePathBase(baseHref);    
+            }            
+
             // Configure the HTTP request pipeline.
             if (!app.Environment.IsDevelopment())
             {
