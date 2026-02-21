@@ -1,0 +1,19 @@
+services:
+  editor:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "5268:8080"
+      - "7268:8443"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:8080
+    volumes:
+      - ./Editor/Mapas:/app/Mapas
+    container_name: editor-app
+    restart: unless-stopped
+
+networks:
+  default:
+    name: editor-network

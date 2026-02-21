@@ -1,0 +1,11 @@
+# Construir imagen
+podman build -t editor-app .
+
+# Iniciar aplicación
+podman run -d --name editor-app -p 5268:8080 -e ASPNETCORE_ENVIRONMENT=Development editor-app
+
+# Ver logs
+podman logs editor-app
+
+# Detener
+podman stop editor-app

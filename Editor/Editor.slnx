@@ -1,3 +1,12 @@
 <Solution>
-  <Project Path="Editor/Editor.csproj" />
+  <Configurations>
+    <Platform Name="Any CPU" />
+    <Platform Name="ARM64" />
+  </Configurations>
+  <Folder Name="/Documentos/">
+    <File Path="command.txt" />
+  </Folder>
+  <Project Path="Editor/Editor.csproj">
+    <Platform Solution="*|ARM64" Project="ARM64" />
+  </Project>
 </Solution>
